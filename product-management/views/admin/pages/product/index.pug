@@ -1,0 +1,62 @@
+extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+
+block main
+    h1.mb-4.fs-3 Danh sách sản phẩm
+    .card.mb-3
+        .card-header Bộ lọc và Tìm kiếm
+        .card-body
+            .row
+                .col-9
+                    +filter-status(filters)
+                .col-3
+                    form(id="form-search")
+                        .input-group
+                            input(
+                                type="text"
+                                placeholder = "Nhâp từ khóa"
+                                name="keyword"
+                                class="form-control"
+                                value = keyword
+                            ) 
+                            .input-group-append
+                                button(
+                                    class="btn btn-success"
+                                    type="success"
+                                ) Tìm
+    .card.mb-3
+        .card-header.bg-white Danh sách
+            .card-body.bg-white
+                table.table.table-hover.table-sm
+                    thead
+                        tr
+                            th(width="5%") STT
+                            th(width="10%") Hình ảnh
+                            th(width="15%") Tiêu đề
+                            th(width="10%") Giá
+                            th(width="10%") Giảm giá
+                            th(width="10%") Trong kho
+                            th(width="15%") Trạng thái
+                            th(width="15%") Hành động
+                    tbody
+                        each item, index in products
+                            tr.item-row
+                                td.align-middle  #{index + 1}
+                                td
+                                    img(
+                                        src=item.thumbnail, alt=item.title
+                                        style="height: 50px; width: 100px; object-fit: cover"
+                                    )
+                                td.align-middle #{item.title}
+                                td.align-middle  #{item.price}$
+                                td.align-middle  #{item.discountPercentage}%
+                                td.align-middle  #{item.stock}
+                                if item.status === "active"
+                                    td.text-success.fw-bold.align-middle.fs-6  Hoạt động
+                                else    
+                                    td.text-danger.fw-bold.align-middle.fs-6  Dừng kinh doanh
+                                td.align-middle 
+                                    button(class="btn btn-warning btn-sm" style="margin-right: 10px") Sửa 
+                                    button(class="btn btn-danger btn-sm ml-2") Xóa
+                        
+                        

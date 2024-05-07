@@ -1,0 +1,6 @@
+extends layouts/default.pug 
+//- Nhúng file mixin 
+include  mixins/box-head.pug
+block main
+    //- Muốn dùng mixin thì truyền vào dấu cộng
+    +box-head("Trang chủ", "Thông tin chi tiết ")

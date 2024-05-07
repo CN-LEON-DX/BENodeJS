@@ -1,0 +1,10 @@
+extends layouts/default.pug 
+//- Nhúng file mixin 
+include  mixins/box-head.pug
+block main
+    +box-head("Sản phẩm", "Thông tin sản phẩm ! ")
+    ul
+        each item, index in products
+            li Product #{index + 1}: #{item.title}, Price: #{item.price}
+            li 
+                img(src=item.thumbnail, alt="img")
