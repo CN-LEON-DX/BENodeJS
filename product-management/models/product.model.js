@@ -14,5 +14,4 @@ const productShema = new mongoose.Schema({
 });
 // Befor get an model we need to have a Schema and name of table 
 const Product = mongoose.model('Product', productShema, "products");
-
 module.exports = Product;
