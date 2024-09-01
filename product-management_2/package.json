@@ -4,16 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
     "start": "nodemon --inspect index.js",
+    "start:dev": "npm-run-all --parallel build:css start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "mongoose": "^8.6.0",
     "pug": "^3.0.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "npm-run-all": "^4.1.5",
+    "tailwindcss": "^3.4.10"
   }
 }
