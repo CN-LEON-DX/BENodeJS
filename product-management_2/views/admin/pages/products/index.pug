@@ -1,0 +1,44 @@
+extends ../../layouts/default.pug
+include ../../mixins/filterProduct.pug
+include ../../mixins/pagination.pug
+
+block main
+    div(class="flex")
+        div(class="menu flex-shrink-0 w-48 p-4 bg-gray-100 h-screen")
+            a(href="/admin/dashboard" class="block py-2 text-gray-700 hover:text-gray-900") Dashboard
+            a(href="/admin/products" class="block py-2 text-gray-700 hover:text-gray-900") Product
+        div(class="list-product flex-grow p-4 relative")
+            h2(class="title text-2xl font-bold mb-4") List product 
+
+            +filterProduct('/admin/products', priceRange, status, search)
+
+            table(class="min-w-full table-auto")
+                thead
+                    tr(class="bg-gray-200 text-left")
+                        th(class="p-2") ID
+                        th(class="p-2") Image
+                        th(class="p-2") Name
+                        th(class="p-2") Price
+                        th(class="p-2") Status
+                        th(class="p-2") Action
+                tbody
+                    each product, index in products
+                        tr(class="border-b")
+                            td(class="p-2")= index + 1
+                            td(class="p-2")
+                                img(src=`${product.thumbnail}` alt=`${product.name}` class="w-16 h-auto object-cover")
+                            td(class="p-2")= product.title
+                            td(class="p-2") #{product.price}$
+                            if product.status === 'active'
+                                td(class="p-2 text-green-700")= product.status
+                            else
+                                td(class="p-2 text-red-700")= product.status
+                            td(class="p-2 flex items-center h-full pt-[20px] space-x-2")
+                                form(action=`/admin/products/${product.id}` method="GET" class="inline")
+                                    button(type="submit" class="text-blue-700 bg-white border border-gray-300 rounded-md py-1 px-2 hover:bg-gray-100") View
+                                form(action=`/admin/products/${product.id}/edit` method="GET" class="inline")
+                                    button(type="submit" class="text-green-700 bg-white border border-gray-300 rounded-md py-1 px-2 hover:bg-gray-100") Edit
+                                form(action=`/admin/products/${product.id}?_method=DELETE` method="POST" class="inline")
+                                    button(type="submit" class="text-red-700 bg-white border border-gray-300 rounded-md py-1 px-2 hover:bg-gray-100") Delete
+            +pagination(pagination)
+            

@@ -1,3 +1,5 @@
+// [GET] /products
+
 const Product = require("../../models/product.model");
 
 module.exports.index = async (req, res) => {
@@ -5,13 +7,17 @@ module.exports.index = async (req, res) => {
     status: "active",
   });
 
-  products.map((product) => {
-    product.newPrice =
-      (product.price * (1.0 - product.discountPercentage / 100)).toFixed(2);
+  const newProduct = products.map((product) => {
+    product.newPrice = (
+      product.price *
+      (1.0 - product.discountPercentage / 100)
+    ).toFixed(2);
+
+    return product;
   });
 
   res.render("client/pages/products/index", {
     pageTitle: "List product 123",
-    products: products,
+    products: newProduct,
   });
 };

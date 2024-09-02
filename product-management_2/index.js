@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const app = express();
 require("dotenv").config(); // must declare dotenv to using it
 
-database = require("./config/database")
+database = require("./config/database");
 database.connect();
 
-const route = require("./routers/client/index.route");
+const routeClient = require("./routers/client/index.route");
+const routeAdmin = require("./routers/admin/index.route");
 
 const port = process.env.PORT;
 
@@ -17,7 +18,8 @@ app.set("view engine", "pug");
 app.use(express.static("public"));
 
 // embed const route
-route(app);
+routeClient(app);
+routeAdmin(app);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
