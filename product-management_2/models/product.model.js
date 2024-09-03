@@ -9,7 +9,8 @@ const productSchema = new mongoose.Schema({
   thumbnail: String,
   status: String,
   position: Number,
-  deleted: Boolean
+  deleted: Boolean,
+  deletedAt: Date
 });
 
 const Product = mongoose.model("Products", productSchema, "products"); // Name model in 3st para

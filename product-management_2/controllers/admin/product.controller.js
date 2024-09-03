@@ -1,5 +1,6 @@
 const Product = require("../../models/product.model");
 const filterProductHelper = require("../../helpers/filterProduct.helper");
+const systemConfig = require("../../config/system");
 
 module.exports.index = async (req, res) => {
   let query = filterProductHelper(req);
@@ -37,5 +38,40 @@ module.exports.index = async (req, res) => {
     status,
     search,
     pagination: pagination,
+    prefixAdmin: systemConfig.prefixAdmin,
   });
+};
+
+module.exports.edit = async (req, res) => {
+  const { id, title, price, status } = req.params;
+  try {
+    await Product.findByIdAndUpdate(id, {
+      title: title,
+      price: price,
+      status: status,
+    });
+    res.redirect("back");
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.delete = async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (id) {
+      await Product.updateOne(
+        { _id: id },
+        { deleted: true, 
+          deletedAt: new Date() 
+        }
+      );
+      res.redirect("back");
+    } else {
+      res.status(404).send("Product not found");
+    }
+  } catch (error) {
+    res.status(500).send("Error deleting product");
+  }
 };

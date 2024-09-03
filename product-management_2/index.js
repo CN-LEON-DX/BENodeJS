@@ -1,7 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require("dotenv").config();
+var methodOverride = require("method-override");
+
 const app = express();
-require("dotenv").config(); // must declare dotenv to using it
+
+app.use(methodOverride("_method"));
 
 database = require("./config/database");
 database.connect();
