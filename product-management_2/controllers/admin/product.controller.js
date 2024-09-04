@@ -1,6 +1,7 @@
 const Product = require("../../models/product.model");
 const filterProductHelper = require("../../helpers/filterProduct.helper");
 const systemConfig = require("../../config/system");
+const mongoose = require("mongoose");
 
 module.exports.index = async (req, res) => {
   let query = filterProductHelper(req);
@@ -63,9 +64,7 @@ module.exports.delete = async (req, res) => {
     if (id) {
       await Product.updateOne(
         { _id: id },
-        { deleted: true, 
-          deletedAt: new Date() 
-        }
+        { deleted: true, deletedAt: new Date() }
       );
       res.redirect("back");
     } else {
@@ -73,5 +72,51 @@ module.exports.delete = async (req, res) => {
     }
   } catch (error) {
     res.status(500).send("Error deleting product");
+  }
+};
+
+module.exports.deleteMultiple = async (req, res) => {
+  try {
+    const ids = JSON.parse(req.body.ids);
+
+    const formattedIds = ids.map(
+      (id) => new mongoose.Types.ObjectId(id.trim())
+    );
+
+    await Product.updateMany(
+      { _id: { $in: formattedIds } },
+      { $set: { deleted: true, deletedAt: new Date() } }
+    );
+
+    res.redirect("back");
+  } catch (error) {
+    console.error("Error processing product IDs:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.changePosition = async (req, res) => {
+  try {
+    const products = JSON.parse(req.body.products);
+
+    for (const product of products) {
+      const { id, position } = product;
+
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new Error(`Invalid product ID: ${id}`);
+      }
+
+      const positionAsInt = parseInt(position, 10);
+
+      await Product.updateOne(
+        { _id: new mongoose.Types.ObjectId(id) },
+        { $set: { position: positionAsInt } }
+      );
+    }
+
+    res.redirect("back");
+  } catch (error) {
+    console.error("Error processing product positions:", error);
+    res.status(500).send("Internal Server Error");
   }
 };

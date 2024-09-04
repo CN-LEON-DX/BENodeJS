@@ -11,23 +11,34 @@ block main
             h2(class="title text-2xl font-bold mb-4") List product 
 
             +filterProduct('/admin/products', priceRange, status, search)
-
+            div(class="flex")
+                button(type="button" id="multiSelectToggle" class="mb-4 bg-blue-500 text-white py-2 px-4 rounded-md") Multi-edit
+                div(class="ml-4 hidden select-column")
+                    button(class="bg-red-500 text-white py-2 px-4 rounded-md" id="btn-delete-mul") Del-product selected
+                div(class="ml-4 hidden select-column")
+                    button(class="bg-slate-700 text-white py-2 px-4 rounded-md" id="btn-change-position") Change position
             table(class="min-w-full table-auto")
                 thead
                     tr(class="bg-gray-200 text-left")
+                        th(class="p-2 hidden select-column") Select
                         th(class="p-2") ID
                         th(class="p-2") Image
                         th(class="p-2") Name
+                        th(class="p-2 hidden select-column") Position
                         th(class="p-2") Price
                         th(class="p-2") Status
                         th(class="p-2") Action
                 tbody
                     each product, index in products
                         tr(class="border-b")
+                            td(class="p-2 hidden select-column")
+                                input(type="checkbox" name="productIds" value=`${product.id}` class="select-checkbox")
                             td(class="p-2")= index + 1
                             td(class="p-2")
                                 img(src=`${product.thumbnail}` alt=`${product.name}` class="w-20 aspect-video object-cover")
                             td(class="p-2")= product.title
+                            td(class="p-2 hidden select-column")
+                                input(type="number" name="positions" value=`${product.position}` class="w-16 border border-gray-300 p-1 rounded-md position-input")
                             td(class="p-2") #{product.price}$
                             if product.status === 'active'
                                 td(class="p-2 text-green-700")= product.status
@@ -65,5 +76,7 @@ block main
                             button(type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md" id="saveChangesBtn") Save Changes
 
             +pagination(pagination)
+
+    script(src="/js/admin-product.js") 
 
             
