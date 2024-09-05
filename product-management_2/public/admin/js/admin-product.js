@@ -154,5 +154,4 @@ if (alertMessage) {
   btnCloseAlert.addEventListener("click", () => {
     alertMessage.classList.add("hidden");
   });
-
 }

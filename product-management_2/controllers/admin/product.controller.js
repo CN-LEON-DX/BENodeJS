@@ -134,6 +134,11 @@ module.exports.create = async (req, res) => {
 
 module.exports.createProduct = async (req, res) => {
   let totalProducts = await Product.countDocuments();
+  if (!req.file) {
+    req.flash("error", "Please upload a file");
+    res.redirect("back");
+    return;
+  }
   req.body.title = req.body.name;
   req.body.status = "active";
   req.body.price = req.body.price ? parseFloat(req.body.price) : 0;
