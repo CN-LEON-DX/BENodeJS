@@ -145,8 +145,8 @@ module.exports.createProduct = async (req, res) => {
   req.body.discountPercentage = req.body.discountPercentage
     ? parseFloat(req.body.discountPercentage)
     : 0;
-  console.log(req.body);
-
+  req.body.thumbnail = `/uploads/${req.file.filename}`; // FiLE NAME HaS BEEN CHaNGeD
+  // console.log(req.body);
   try {
     const product = new Product(req.body);
     await product.save();

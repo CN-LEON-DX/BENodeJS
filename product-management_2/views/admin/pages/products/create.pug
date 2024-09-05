@@ -9,7 +9,7 @@ block main
             h2(class="title text-2xl font-bold mb-4") Create product
 
             // Form with two-column layout
-            form(class="grid grid-cols-[1fr,2fr] gap-8" method="POST" action=`${prefixAdmin}/products/create` )
+            form(class="grid grid-cols-[1fr,2fr] gap-8" method="POST" action=`${prefixAdmin}/products/create` enctype="multipart/form-data")
                 // Left column - General Information
                 div
                     label(for="name" class="mb-2 block font-semibold") Name
@@ -41,8 +41,8 @@ block main
 
                 div
                     
-                    //- label(for="image" class="mb-2 block font-semibold") Image
-                    //- input(type="file" name="image" id="image" class="w-full p-2 mb-4 border border-gray-300 rounded")
+                    label(for="thumbnail" class="mb-2 block font-semibold") Image
+                    input(type="file" accept="image/*" name="thumbnail" id="thumbnail" class="w-full p-2 mb-4 border border-gray-300 rounded")
                     
                     
                     label(for="description" class="mb-2 block font-semibold") Description
@@ -69,5 +69,5 @@ block main
                 div(class="col-span-2 absolute right-[20px] top-[20px]")
                     button(type="submit" class="bg-blue-500 text-white px-4 py-2 rounded") Create Product
 
-    script(src="/js/admin/create-product.js") 
+    script(src="/admin/js/create-product.js") 
     

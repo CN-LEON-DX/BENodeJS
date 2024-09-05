@@ -11,3 +11,4 @@
   //   "pug": "^3.0.3" // template engine
         
   //   "mongoose-slug-updater": "^3.3.0", // auto add slug
+  "multer": "^1.4.5-lts.1",
