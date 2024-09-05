@@ -3,11 +3,14 @@ const router = express.Router();
 
 const controller = require("../../controllers/admin/product.controller");
 
-console.log("product route");
+// console.log("product route");
+
 router.get("/", controller.index);
 router.patch("/edit/:id/:title/:price/:status", controller.edit);
 router.delete("/delete/:id", controller.delete);
 router.delete("/delete-multiple", controller.deleteMultiple);
 router.patch("/change-position/", controller.changePosition);
+router.get("/create", controller.create);
+router.post("/create", controller.createProduct);
 
 module.exports = router;

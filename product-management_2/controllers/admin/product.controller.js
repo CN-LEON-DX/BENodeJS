@@ -22,9 +22,11 @@ module.exports.index = async (req, res) => {
     pagination.currentPage = 1;
   }
 
+  let skipPage = (pagination.currentPage - 1) * pagination.limitItems;
+
   const products = await Product.find(query)
     .limit(pagination.limitItems)
-    .skip((pagination.currentPage - 1) * pagination.limitItems);
+    .skip(skipPage > 0 ? skipPage : 0);
 
   pagination.pages = Array.from(
     { length: totalPages },
@@ -51,6 +53,7 @@ module.exports.edit = async (req, res) => {
       price: price,
       status: status,
     });
+    req.flash("success", "Product updated successfully");
     res.redirect("back");
   } catch (error) {
     console.error("Error updating product:", error);
@@ -67,6 +70,7 @@ module.exports.delete = async (req, res) => {
         { deleted: true, deletedAt: new Date() }
       );
       res.redirect("back");
+      req.flash("success", "Product delete successfully");
     } else {
       res.status(404).send("Product not found");
     }
@@ -87,7 +91,7 @@ module.exports.deleteMultiple = async (req, res) => {
       { _id: { $in: formattedIds } },
       { $set: { deleted: true, deletedAt: new Date() } }
     );
-
+    req.flash("success", "Product updated successfully");
     res.redirect("back");
   } catch (error) {
     console.error("Error processing product IDs:", error);
@@ -113,10 +117,44 @@ module.exports.changePosition = async (req, res) => {
         { $set: { position: positionAsInt } }
       );
     }
-
+    req.flash("success", "Product positions updated successfully");
     res.redirect("back");
   } catch (error) {
     console.error("Error processing product positions:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.create = async (req, res) => {
+  res.render("admin/pages/products/create", {
+    pageTitle: "Create product",
+    prefixAdmin: systemConfig.prefixAdmin,
+  });
+};
+
+module.exports.createProduct = async (req, res) => {
+  let totalProducts = await Product.countDocuments();
+  req.body.title = req.body.name;
+  req.body.status = "active";
+  req.body.price = req.body.price ? parseFloat(req.body.price) : 0;
+  req.body.stock = req.body.stock ? parseInt(req.body.stock) : 0;
+  req.body.rating = req.body.rating ? parseFloat(req.body.rating) : 5;
+  req.body.position = req.body.position
+    ? parseFloat(req.body.position)
+    : totalProducts + 1;
+  req.body.discountPercentage = req.body.discountPercentage
+    ? parseFloat(req.body.discountPercentage)
+    : 0;
+  console.log(req.body);
+
+  try {
+    const product = new Product(req.body);
+    await product.save();
+
+    req.flash("success", "Product created successfully");
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  } catch (error) {
+    console.error("Error creating product:", error);
     res.status(500).send("Internal Server Error");
   }
 };

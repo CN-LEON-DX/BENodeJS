@@ -1,22 +1,26 @@
 extends ../../layouts/default.pug
 include ../../mixins/filterProduct.pug
 include ../../mixins/pagination.pug
+include ../../mixins/alert.pug
 
 block main
+    +alert-success()
     div(class="flex")
-        div(class="menu flex-shrink-0 w-48 p-4 bg-gray-100 h-screen")
-            a(href="/admin/dashboard" class="block py-2 text-gray-700 hover:text-gray-900") Dashboard
-            a(href="/admin/products" class="block py-2 text-gray-700 hover:text-gray-900") Product
+        div(class="menu flex-shrink-0 w-48 p-4 bg-gray-700 h-screen")
+            a(href="/admin/dashboard" class="block py-2 text-white") Dashboard
+            a(href="/admin/products" class="block py-2 text-white") Product
         div(class="list-product flex-grow p-4 relative")
             h2(class="title text-2xl font-bold mb-4") List product 
 
             +filterProduct('/admin/products', priceRange, status, search)
             div(class="flex")
-                button(type="button" id="multiSelectToggle" class="mb-4 bg-blue-500 text-white py-2 px-4 rounded-md") Multi-edit
+                button(type="button" id="multiSelectToggle" class="mb-4 bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-teal-900") Multi-edit
                 div(class="ml-4 hidden select-column")
                     button(class="bg-red-500 text-white py-2 px-4 rounded-md" id="btn-delete-mul") Del-product selected
                 div(class="ml-4 hidden select-column")
                     button(class="bg-slate-700 text-white py-2 px-4 rounded-md" id="btn-change-position") Change position
+                button(class="ml-4 mb-4 bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-teal-900")
+                    a(href="/admin/products/create" ) Add product
             table(class="min-w-full table-auto")
                 thead
                     tr(class="bg-gray-200 text-left")
@@ -77,6 +81,6 @@ block main
 
             +pagination(pagination)
 
-    script(src="/js/admin-product.js") 
+    script(src="/js/admin/admin-product.js") 
 
             

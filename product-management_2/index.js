@@ -2,13 +2,21 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 var methodOverride = require("method-override");
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+var flash = require('express-flash')
 
 const app = express();
 
 app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// flash message
+app.use(cookieParser('CN-LEON-DX')); // random key :ơ]
+app.use(session({ cookie: { maxAge: 60000 }, secret: 'CN-LEON-DX', resave: false, saveUninitialized: false }));
+app.use(flash());
 
 database = require("./config/database");
 database.connect();
