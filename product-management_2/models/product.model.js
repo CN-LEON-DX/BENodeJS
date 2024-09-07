@@ -7,10 +7,19 @@ const productSchema = new mongoose.Schema(
     title: String, // Product1
     description: String,
     price: Number,
-    discountPercentage: Number,
-    stock: Number,
+    discountPercentage: {
+      type:Number,
+      default: 0
+    },
+    stock: {
+      type:Number,
+      default: 0
+    },
     thumbnail: String,
-    status: String,
+    status: {
+      type:String,
+       default: "active"
+    },
     position: Number,
     slug: {
       type: String,

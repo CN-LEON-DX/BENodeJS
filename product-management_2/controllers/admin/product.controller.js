@@ -45,7 +45,7 @@ module.exports.index = async (req, res) => {
   });
 };
 
-module.exports.edit = async (req, res) => {
+module.exports.editFast = async (req, res) => {
   const { id, title, price, status } = req.params;
   try {
     await Product.findByIdAndUpdate(id, {
@@ -134,11 +134,7 @@ module.exports.create = async (req, res) => {
 
 module.exports.createProduct = async (req, res) => {
   let totalProducts = await Product.countDocuments();
-  if (!req.file) {
-    req.flash("error", "Please upload a file");
-    res.redirect("back");
-    return;
-  }
+
   req.body.title = req.body.name;
   req.body.status = "active";
   req.body.price = req.body.price ? parseFloat(req.body.price) : 0;
@@ -150,7 +146,7 @@ module.exports.createProduct = async (req, res) => {
   req.body.discountPercentage = req.body.discountPercentage
     ? parseFloat(req.body.discountPercentage)
     : 0;
-  req.body.thumbnail = `/uploads/${req.file.filename}`; // FiLE NAME HaS BEEN CHaNGeD
+  req.body.thumbnail = `/admin/uploads/${req.file.filename}`; // FiLE NAME HaS BEEN CHaNGeD
   // console.log(req.body);
   try {
     const product = new Product(req.body);
@@ -160,6 +156,56 @@ module.exports.createProduct = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   } catch (error) {
     console.error("Error creating product:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.fastEditProduct = async (req, res) => {
+  console.log(req.params.id);
+  // find product by id
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
+    const product = await Product.findOne(find);
+    if (!product) {
+      res.status(404).send("Product not found");
+    }
+    res.render("admin/pages/products/edit", {
+      pageTitle: "Edit product",
+      product: product,
+      prefixAdmin: systemConfig.prefixAdmin,
+    });
+  } catch (error) {
+    flash("error", "Product not found");
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
+};
+
+module.exports.updateProduct = async (req, res) => {
+  console.log(req.body);
+  req.body.title = req.body.name;
+  req.body.status = "active";
+  req.body.price = req.body.price ? parseFloat(req.body.price) : 0;
+  req.body.stock = req.body.stock ? parseInt(req.body.stock) : 1;
+  req.body.rating = req.body.rating ? parseFloat(req.body.rating) : 5;
+  req.body.position = req.body.position
+    ? parseFloat(req.body.position)
+    : totalProducts + 1;
+  req.body.discountPercentage = req.body.discountPercentage
+    ? parseFloat(req.body.discountPercentage)
+    : 0;
+  if (req.file) {
+    req.body.thumbnail = `/admin/uploads/${req.file.filename}`;
+    console.log(req.file.filename);
+  }
+  try {
+    await Product.findByIdAndUpdate(req.params.id, req.body);
+    req.flash("success", "Product updated successfully");
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  } catch (error) {
+    console.error("Error updating product:", error);
     res.status(500).send("Internal Server Error");
   }
 };
