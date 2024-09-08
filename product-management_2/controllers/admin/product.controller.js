@@ -4,9 +4,10 @@ const systemConfig = require("../../config/system");
 const mongoose = require("mongoose");
 
 module.exports.index = async (req, res) => {
+  console.log(Product.find({}));
   let query = filterProductHelper(req);
   const { priceRange, status, search } = req.query;
-
+  
   const pagination = {
     limitItems: 5,
     currentPage: parseInt(req.query.page) || 1,
@@ -184,7 +185,6 @@ module.exports.fastEditProduct = async (req, res) => {
 };
 
 module.exports.updateProduct = async (req, res) => {
-  console.log(req.body);
   req.body.title = req.body.name;
   req.body.status = "active";
   req.body.price = req.body.price ? parseFloat(req.body.price) : 0;
@@ -198,7 +198,6 @@ module.exports.updateProduct = async (req, res) => {
     : 0;
   if (req.file) {
     req.body.thumbnail = `/admin/uploads/${req.file.filename}`;
-    console.log(req.file.filename);
   }
   try {
     await Product.findByIdAndUpdate(req.params.id, req.body);
@@ -206,6 +205,20 @@ module.exports.updateProduct = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   } catch (error) {
     console.error("Error updating product:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.detailProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    res.render("admin/pages/products/detail", {
+      pageTitle: "Detail product",
+      product: product,
+      prefixAdmin: systemConfig.prefixAdmin,
+    });
+  } catch (error) {
+    console.error("Error getting product detail:", error);
     res.status(500).send("Internal Server Error");
   }
 };

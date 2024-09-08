@@ -55,6 +55,7 @@ block main
                                     data-price=`${product.price}`
                                     data-status=`${product.status}`) Fast edit
                                 a(href=`${prefixAdmin}/products/edit/${product.id}` class="text-purple-600 bg-white border border-gray-300 rounded-md py-1 px-2 hover:bg-gray-100" ) Edit
+                                a(href=`${prefixAdmin}/products/detail/${product.id}` class="text-lime-700 bg-white border border-gray-300 rounded-md py-1 px-2 hover:bg-gray-100" ) Detail
                                 button(btn-delete data-id=`${product.id}` class="text-red-700 bg-white border border-gray-300 rounded-md py-1 px-2 hover:bg-gray-100" ) Delete
             
             

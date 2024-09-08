@@ -19,7 +19,7 @@ app.use(session({ cookie: { maxAge: 60000 }, secret: 'CN-LEON-DX', resave: false
 app.use(flash());
 
 database = require("./config/database");
-database.connect();
+database.connectDB();
 
 const routeClient = require("./routers/client/index.route");
 const routeAdmin = require("./routers/admin/index.route");

@@ -32,4 +32,6 @@ router.patch(
   controller.updateProduct
 );
 
+router.get("/detail/:id", controller.detailProduct);
+
 module.exports = router;
