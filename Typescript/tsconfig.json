@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "outDir": "js", // Output directory
+    "target": "ES6", // Target version 
+    "module": "commonjs", // ComonJS is a starting point for NodeJS for module, like require, exports
+    "removeComments": true, // Remove comments
+  }
+}
+
+// command auto complie typescript to js
+// tsc -w

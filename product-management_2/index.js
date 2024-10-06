@@ -26,11 +26,11 @@ const routeAdmin = require("./routers/admin/index.route");
 
 const port = process.env.PORT;
 
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 
 // use folder public
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 // embed const route
 routeClient(app);

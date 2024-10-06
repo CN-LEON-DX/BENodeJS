@@ -1,15 +1,15 @@
 {
-  "name": "database",
+  "name": "soketio-exam",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "json-server --watch database.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "json-server": "^1.0.0-beta.3"
+  "dependencies": {
+    "express": "^4.21.0",
+    "socket.io": "^4.8.0"
   }
 }
